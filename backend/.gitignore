@@ -1,0 +1,6 @@
+
+# production
+/tmp
+
+# module
+go.sum
