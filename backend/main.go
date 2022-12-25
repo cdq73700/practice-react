@@ -31,7 +31,7 @@ func main() {
 	}
 
 	if arg1 == "delete" {
-		migration.CollectionDrop(client)
+		migration.CollectionDelete(client)
 
 		fmt.Println("run detele")
 		return

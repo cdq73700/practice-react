@@ -1,57 +1,38 @@
 package migration
 
 import (
+	"backend/db/migration/menus"
+	"backend/db/migration/users"
 	"context"
-	"fmt"
 
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Tea struct {
-	Type     string
-	Category string
-	Toppings []string
-	Price    float32
-}
+const DATABASE_NAME = "test"
 
 func Migration(client *mongo.Client) {
 
-	coll := client.Database("tea").Collection("menu")
-	docs := []interface{}{
-		Tea{Type: "Masala", Category: "black", Toppings: []string{"ginger", "pumpkin spice", "cinnamon"}, Price: 6.75},
-		Tea{Type: "Gyokuro", Category: "green", Toppings: []string{"berries", "milk foam"}, Price: 5.65},
-		Tea{Type: "English Breakfast", Category: "black", Toppings: []string{"whipped cream", "honey"}, Price: 5.75},
-		Tea{Type: "Sencha", Category: "green", Toppings: []string{"lemon", "whipped cream"}, Price: 5.15},
-		Tea{Type: "Assam", Category: "black", Toppings: []string{"milk foam", "honey", "berries"}, Price: 5.65},
-		Tea{Type: "Matcha", Category: "green", Toppings: []string{"whipped cream", "honey"}, Price: 6.45},
-		Tea{Type: "Earl Grey", Category: "black", Toppings: []string{"milk foam", "pumpkin spice"}, Price: 6.15},
-		Tea{Type: "Hojicha", Category: "green", Toppings: []string{"lemon", "ginger", "milk foam"}, Price: 5.55},
-	}
-	result, err := coll.InsertMany(context.TODO(), docs)
+	db := client.Database(DATABASE_NAME)
 
-	if err != nil {
-		panic(err)
-	}
+	users.CreateUsers(db)
 
-	fmt.Print(result)
+	menus.CreateMenus(db)
 
 }
 
-func CollectionDrop(client *mongo.Client) {
+func CollectionDelete(client *mongo.Client) {
 
-	coll := client.Database("tea").Collection("menu")
+	db := client.Database(DATABASE_NAME)
 
-	err := coll.Drop(context.TODO())
+	users.DropUsers(db)
 
-	if err != nil {
-		panic(err)
-	}
+	menus.DropMenus(db)
 
 }
 
 func DatabaseDrop(client *mongo.Client) {
 
-	database := client.Database("tea")
+	database := client.Database(DATABASE_NAME)
 
 	err := database.Drop(context.TODO())
 
