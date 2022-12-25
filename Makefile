@@ -32,7 +32,7 @@ express:
 del:
 	docker rm -f `docker ps -a -q`
 	docker rmi -f `docker images -q`
-	rm -rf fiber-frontend
-	rm -rf fiber-backend 
-	rm -rf fiber-mongo
-	rm -rf fiber-mongo-express
+go-update:
+	docker-compose exec fiber-backend sh -c "go mod download"
+migration:
+	docker-compose exec fiber-backend sh -c "go run main.go migration"
