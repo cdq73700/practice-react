@@ -2,20 +2,27 @@ package main
 
 import (
 	"backend/api/v1/test"
+	"backend/api/v1/users"
 	"backend/db"
 	"backend/db/migration"
 	"fmt"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func setUpRoutes(app *fiber.App) {
+func setUpRoutes(app *fiber.App, db *mongo.Database) {
 	app.Get("/api/v1/test", test.GetTest)
+	app.Get("/api/v1/users/:name?", func(c *fiber.Ctx) error { return users.GetUsers(c, db) })
 }
 
 func main() {
-	arg1 := os.Args[1]
+	var arg1 = ""
+	if len(os.Args) == 2 {
+		arg1 = os.Args[1]
+	}
+
 	client, err := db.GetMongoDbConnection()
 	if err != nil {
 		fmt.Println(err)
@@ -45,13 +52,10 @@ func main() {
 	}
 	app := fiber.New()
 
-	//client, err := db.GetMongoDbConnection()
-
-	setUpRoutes(app)
+	setUpRoutes(app, client.Database("test"))
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World 👋!")
 	})
-
 	app.Listen(":3000")
 }

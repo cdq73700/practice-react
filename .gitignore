@@ -1,3 +1,6 @@
 # database
 /db
 /configdb
+
+# userConfig
+/.vscode
