@@ -7,6 +7,9 @@ up:
 	docker-compose up -d
 stop:
 	docker-compose stop
+reset:
+	docker-compose stop
+	docker-compose up -d
 ps:
 	docker-compose ps
 ci:
