@@ -17,14 +17,19 @@
 			2,
 			{ "namedComponents": "arrow-function" }
 		],
-		"react/jsx-boolean-value": "error",
-		"react/jsx-curly-brace-presence": "error",
+		"react/require-default-props": "off",
+		"react/forbid-prop-types": "off",
+		"react/jsx-boolean-value": "warn",
+		"react/jsx-curly-brace-presence": "warn",
 		"react/self-closing-comp": [
-			"error",
+			"warn",
 			{
 				"component": true,
 				"html": true
 			}
-		]
+		],
+		"no-unused-vars": ["off", { "extensions": ["index.js"] }],
+		"import/prefer-default-export": "off",
+		"react/jsx-props-no-spreading": [1, { "custom": "ignore" }]
 	}
 }
