@@ -36,6 +36,6 @@ func GetUsers(c *fiber.Ctx, db *mongo.Database) error {
 	}
 	return c.JSON(&fiber.Map{
 		"success": true,
-		"users":   results,
+		"items":   results,
 	})
 }

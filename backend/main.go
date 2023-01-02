@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -51,6 +52,9 @@ func main() {
 		return
 	}
 	app := fiber.New()
+
+	// Default config
+	app.Use(cors.New())
 
 	setUpRoutes(app, client.Database("test"))
 
