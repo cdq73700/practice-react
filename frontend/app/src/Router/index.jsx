@@ -1,5 +1,4 @@
-import { ColorModeProvider, ThemeProvider } from '@chakra-ui/react'
-import PropTypes from 'prop-types'
+import { ChakraBaseProvider, theme } from '@chakra-ui/react'
 import React from 'react'
 import { Provider } from 'react-redux'
 import { store } from '../Store'
@@ -10,16 +9,12 @@ import { RouterConfig } from './Router'
  * @param {node} children
  * @returns
  */
-export const RouterProvider = ({ children }) => (
+export const RouterProvider = () => (
 	<Provider store={store}>
-		<RouterConfig>
-			<ThemeProvider>
-				<ColorModeProvider>{children}</ColorModeProvider>
-			</ThemeProvider>
-		</RouterConfig>
+		<ChakraBaseProvider theme={theme}>
+			<RouterConfig />
+		</ChakraBaseProvider>
 	</Provider>
 )
 
-RouterProvider.propTypes = {
-	children: PropTypes.node,
-}
+RouterProvider.propTypes = {}
