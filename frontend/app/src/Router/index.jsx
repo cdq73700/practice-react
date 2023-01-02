@@ -1,10 +1,9 @@
-import React from 'react'
-import { RouterProvider as ReactRouterProvider } from 'react-router-dom'
-import { Provider } from 'react-redux'
-import { ThemeProvider, ColorModeProvider } from '@chakra-ui/react'
+import { ColorModeProvider, ThemeProvider } from '@chakra-ui/react'
 import PropTypes from 'prop-types'
-import { router } from './Router'
+import React from 'react'
+import { Provider } from 'react-redux'
 import { store } from '../Store'
+import { RouterConfig } from './Router'
 
 /**
  * ルートプロバイダー
@@ -13,11 +12,11 @@ import { store } from '../Store'
  */
 export const RouterProvider = ({ children }) => (
 	<Provider store={store}>
-		<ReactRouterProvider router={router}>
+		<RouterConfig>
 			<ThemeProvider>
 				<ColorModeProvider>{children}</ColorModeProvider>
 			</ThemeProvider>
-		</ReactRouterProvider>
+		</RouterConfig>
 	</Provider>
 )
 

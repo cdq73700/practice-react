@@ -12,32 +12,32 @@ export const ItemList = ({
 }) => {
 	if (isUninitialized) {
 		return (
-			<Stack>
+			<>
 				<Text>isUninitialized</Text>
-			</Stack>
+			</>
 		)
 	}
 	if (isError) {
 		return (
-			<Stack>
+			<>
 				<Text>Error</Text>
-			</Stack>
+			</>
 		)
 	}
 
 	return (
-		<Stack>
+		<>
 			{isLoading ? (
 				<Spinner />
 			) : (
 				data &&
 				data.items.map((items) => (
-					<Stack key={items.Email}>
+					<Stack key={items.Id}>
 						<Item isFetching={isFetching} data={items} />
 					</Stack>
 				))
 			)}
-		</Stack>
+		</>
 	)
 }
 

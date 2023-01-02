@@ -3,33 +3,34 @@ import PropTypes from 'prop-types'
 import { HStack, Skeleton, Stack, Text } from '@chakra-ui/react'
 
 const EmailFiled = ({ Email }) => (
-	<HStack>
-		<Text>Email:</Text>
-		<Text>{Email}</Text>
-	</HStack>
+	<>
+		<Text>{`Email: ${Email}`}</Text>
+	</>
 )
 
 EmailFiled.propTypes = {
 	Email: PropTypes.string,
 }
 
-const UsernameFiled = ({ Username }) => (
-	<HStack>
-		<Text>Username:</Text>
-		<Text>{Username}</Text>
-	</HStack>
+const NameFiled = ({ Name }) => (
+	<>
+		<Text>{`Name: ${Name}`}</Text>
+	</>
 )
 
-UsernameFiled.propTypes = {
-	Username: PropTypes.string,
+NameFiled.propTypes = {
+	Name: PropTypes.string,
 }
 
-export const Item = ({ isFetching, data }) => (
-	<Skeleton isLoaded={!isFetching}>
-		<EmailFiled {...data} />
-		<UsernameFiled {...data} />
-	</Skeleton>
-)
+export const Item = ({ isFetching, data }) => {
+	const { Email, Name } = data
+	return (
+		<Skeleton isLoaded={!isFetching}>
+			<EmailFiled Email={Email} />
+			<NameFiled Name={Name} />
+		</Skeleton>
+	)
+}
 
 Item.propTypes = {
 	isFetching: PropTypes.bool.isRequired,

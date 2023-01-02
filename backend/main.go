@@ -15,7 +15,7 @@ import (
 
 func setUpRoutes(app *fiber.App, db *mongo.Database) {
 	app.Get("/api/v1/test", test.GetTest)
-	app.Get("/api/v1/users/:name?", func(c *fiber.Ctx) error { return users.GetUsers(c, db) })
+	app.Get("/api/v1/users/:id?", func(c *fiber.Ctx) error { return users.GetUsers(c, db) })
 }
 
 func main() {

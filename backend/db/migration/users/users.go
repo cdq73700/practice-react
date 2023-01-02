@@ -4,13 +4,15 @@ import (
 	"context"
 	"fmt"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Users struct {
-	Email    string
-	Username string
-	Password string
+	Id				primitive.ObjectID	"_id"
+	Email			string
+	Name			string
+	Password	string
 }
 
 const USERS = "users"
@@ -19,14 +21,16 @@ func CreateUsers(db *mongo.Database) {
 	users := db.Collection(USERS)
 	docs := []interface{}{
 		&Users{
-			Email:    "test@test.com",
-			Username: "test",
-			Password: "test",
+			Id:				primitive.NewObjectID(),
+			Email:		"test@test.com",
+			Name:			"test",
+			Password:	"test",
 		},
 		&Users{
-			Email:    "test2@test.com",
-			Username: "test2",
-			Password: "test2"},
+			Id:				primitive.NewObjectID(),
+			Email:		"test2@test.com",
+			Name:			"test2",
+			Password:	"test2",},
 	}
 
 	result, err := users.InsertMany(context.TODO(), docs)
