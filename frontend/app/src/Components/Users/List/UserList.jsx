@@ -1,13 +1,14 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import { Spinner, Stack, Text } from '@chakra-ui/react'
-import { Item } from './Item'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { ListBox } from './ListBox'
 
-export const ItemList = ({
+export const UserList = ({
 	isUninitialized,
 	isLoading,
 	isFetching,
 	isError,
+	error,
 	data,
 }) => {
 	if (isUninitialized) {
@@ -18,6 +19,7 @@ export const ItemList = ({
 		)
 	}
 	if (isError) {
+		console.log(error)
 		return (
 			<>
 				<Text>Error</Text>
@@ -25,26 +27,14 @@ export const ItemList = ({
 		)
 	}
 
-	return (
-		<>
-			{isLoading ? (
-				<Spinner />
-			) : (
-				data &&
-				data.items.map((items) => (
-					<Stack key={items.Id}>
-						<Item isFetching={isFetching} data={items} />
-					</Stack>
-				))
-			)}
-		</>
-	)
+	return <>{isLoading ? <Spinner /> : data && <ListBox {...data} />}</>
 }
 
-ItemList.propTypes = {
+UserList.propTypes = {
 	isUninitialized: PropTypes.bool.isRequired,
 	isLoading: PropTypes.bool.isRequired,
 	isFetching: PropTypes.bool.isRequired,
 	isError: PropTypes.bool.isRequired,
+	error: PropTypes.any,
 	data: PropTypes.any,
 }

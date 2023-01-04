@@ -1,16 +1,30 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 
-export const usersApi = createApi({
-	reducerPath: 'usersApi',
-	baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:4000/api/v1/' }),
-	endpoints: (builder) => ({
-		userList: builder.query({
-			query: () => `users`,
-		}),
-		userDetail: builder.query({
-			query: ({ id }) => `users/${id}`,
-		}),
-	}),
+export const staggeredBaseQueryWithBailOut = retry(
+	async (args, api, extraOptions) => {
+		const result = await fetchBaseQuery({
+			baseUrl: 'http://localhost:4000/api/v1/',
+		})(args, api, extraOptions)
+
+		// bail out of re-tries immediately if unauthorized,
+		// because we know successive re-retries would be redundant
+		if (
+			['FETCH_ERROR', 'PARSING_ERROR', 'TIMEOUT_ERROR'].some(
+				(item) => item === result.error?.status
+			)
+		) {
+			retry.fail(result.error)
+		}
+
+		return result
+	},
+	{
+		maxRetries: 5,
+	}
+)
+
+export const backendApi = createApi({
+	reducerPath: 'backendApi',
+	baseQuery: staggeredBaseQueryWithBailOut,
+	endpoints: () => ({}),
 })
-
-export const { useUserListQuery, useUserDetailQuery } = usersApi
