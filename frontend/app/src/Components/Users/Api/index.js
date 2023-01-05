@@ -9,9 +9,14 @@ export const usersApi = createApi({
 			query: () => `users`,
 		}),
 		userDetail: builder.query({
-			query: ({ id }) => `users/${id}`,
+			query: (id) => `users/${id}`,
+			transformResponse: (response) => ({
+				Id: response.items[0].Id,
+				Email: response.items[0].Email,
+				Name: response.items[0].Name,
+			}),
 		}),
 	}),
 })
 
-export const { useUserListQuery, useUserDetailQuery } = usersApi
+export const { useUserListQuery, useUserDetailQuery, usePrefetch } = usersApi

@@ -1,6 +1,7 @@
 import { Spinner, Stack, Text } from '@chakra-ui/react'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useSelectUser } from '../Reducers/CustomHook'
 import { ListBox } from './ListBox'
 
 export const UserList = ({
@@ -11,6 +12,7 @@ export const UserList = ({
 	error,
 	data,
 }) => {
+	const { userId, updateUser } = useSelectUser()
 	if (isUninitialized) {
 		return (
 			<>
@@ -26,6 +28,12 @@ export const UserList = ({
 			</>
 		)
 	}
+
+	useEffect(() => {
+		if (data && userId === '') {
+			updateUser(data.items[0].Id)
+		}
+	}, [data])
 
 	return <>{isLoading ? <Spinner /> : data && <ListBox {...data} />}</>
 }
