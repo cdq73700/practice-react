@@ -15,9 +15,10 @@ import (
 
 func setUpRoutes(app *fiber.App, db *mongo.Database) {
 	app.Get("/api/v1/test", test.GetTest)
-	app.Get("/api/v1/users/:id?", func(c *fiber.Ctx) error { return users.GetUsers(c, db) })
+	app.Get("/api/v1/users/", func(c *fiber.Ctx) error { return users.UserList(c, db) })
+	app.Get("/api/v1/users/:id?", func(c *fiber.Ctx) error { return users.UserFind(c, db) })
 	
-	app.Post("/api/v1/users/add", func(c *fiber.Ctx) error { return users.AddUser(c, db) })
+	app.Post("/api/v1/users/add", func(c *fiber.Ctx) error { return users.UserAdd(c, db) })
 }
 
 func main() {
