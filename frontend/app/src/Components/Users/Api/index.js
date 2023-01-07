@@ -26,7 +26,14 @@ export const usersApi = createApi({
 		userUpdate: builder.mutation({
 			query: (body) => ({
 				url: 'users/update',
-				method: 'POST',
+				method: 'PUT',
+				body,
+			}),
+		}),
+		userDelete: builder.mutation({
+			query: (body) => ({
+				url: 'users/delete',
+				method: 'DELETE',
 				body,
 			}),
 		}),
@@ -39,4 +46,5 @@ export const {
 	usePrefetch,
 	useUserAddMutation,
 	useUserUpdateMutation,
+	useUserDeleteMutation,
 } = usersApi

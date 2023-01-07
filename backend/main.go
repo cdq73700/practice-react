@@ -19,7 +19,8 @@ func setUpRoutes(app *fiber.App, db *mongo.Database) {
 	app.Get("/api/v1/users/:id?", func(c *fiber.Ctx) error { return users.UserFind(c, db) })
 	
 	app.Post("/api/v1/users/add", func(c *fiber.Ctx) error { return users.UserAdd(c, db) })
-	app.Post("/api/v1/users/update", func(c *fiber.Ctx) error { return users.UserUpdate(c, db) })
+	app.Put("/api/v1/users/update", func(c *fiber.Ctx) error { return users.UserUpdate(c, db) })
+	app.Delete("/api/v1/users/delete", func(c *fiber.Ctx) error { return users.UserDelete(c, db) })
 }
 
 func main() {
