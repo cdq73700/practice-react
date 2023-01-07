@@ -2,7 +2,7 @@ import { Card, CardBody, Stack, Text } from '@chakra-ui/react'
 import { skipToken } from '@reduxjs/toolkit/dist/query'
 import PropTypes from 'prop-types'
 import React, { useCallback } from 'react'
-import { useLazyUserDetailQuery, usePrefetch } from '../Api'
+import { usePrefetch } from '../Api'
 import { useSelectUser } from '../Reducers/CustomHook'
 
 export const ListBox = ({ items }) => {
