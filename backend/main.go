@@ -1,9 +1,8 @@
 package main
 
 import (
-	"backend/api/v1/test"
-	"backend/api/v1/users"
 	"backend/db/migration"
+	"backend/internal/user"
 	model "backend/model"
 	"fmt"
 	"os"
@@ -11,25 +10,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
-
-var app *fiber.App
-
-func SetUpRoutes() {
-	api := app.Group("/api")
-	v1 := api.Group("/v1")
-
-	usersApi := v1.Group("/users")
-
-	v1.Get("/test", test.GetTest)
-
-	usersApi.Get("/", func(c *fiber.Ctx) error { return users.UserList(c) })
-	usersApi.Get("/:id?", func(c *fiber.Ctx) error { return users.UserFind(c) })
-	
-	usersApi.Post("/add", func(c *fiber.Ctx) error { return users.UserAdd(c) })
-	usersApi.Put("/update", func(c *fiber.Ctx) error { return users.UserUpdate(c) })
-	usersApi.Delete("/delete", func(c *fiber.Ctx) error { return users.UserDelete(c) })
-
-}
 
 func RunCommand (arg1 string) string {
 	var message string
@@ -68,12 +48,14 @@ func main() {
 		return
 	}
 
-	app = fiber.New()
+	app := fiber.New()
 
 	// Default config
 	app.Use(cors.New())
 
-	SetUpRoutes()
+	userRepository := user.NewUserRepository(model.UserCollectionClient)
+	userService := user.NewUserService(userRepository)
+	user.NewUserHandler(app.Group("/api/v1/users"), userService)
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World 👋!")
