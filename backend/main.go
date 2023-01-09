@@ -15,14 +15,20 @@ import (
 var app *fiber.App
 
 func SetUpRoutes() {
-	app.Get("/api/v1/test", test.GetTest)
+	api := app.Group("/api")
+	v1 := api.Group("/v1")
 
-	app.Get("/api/v1/users", func(c *fiber.Ctx) error { return users.UserList(c) })
-	app.Get("/api/v1/users/:id?", func(c *fiber.Ctx) error { return users.UserFind(c) })
+	usersApi := v1.Group("/users")
+
+	v1.Get("/test", test.GetTest)
+
+	usersApi.Get("/", func(c *fiber.Ctx) error { return users.UserList(c) })
+	usersApi.Get("/:id?", func(c *fiber.Ctx) error { return users.UserFind(c) })
 	
-	app.Post("/api/v1/users/add", func(c *fiber.Ctx) error { return users.UserAdd(c) })
-	app.Put("/api/v1/users/update", func(c *fiber.Ctx) error { return users.UserUpdate(c) })
-	app.Delete("/api/v1/users/delete", func(c *fiber.Ctx) error { return users.UserDelete(c) })
+	usersApi.Post("/add", func(c *fiber.Ctx) error { return users.UserAdd(c) })
+	usersApi.Put("/update", func(c *fiber.Ctx) error { return users.UserUpdate(c) })
+	usersApi.Delete("/delete", func(c *fiber.Ctx) error { return users.UserDelete(c) })
+
 }
 
 func RunCommand (arg1 string) string {
