@@ -16,9 +16,9 @@ export const usersApi = createApi({
 				Name: response.items.Name,
 			}),
 		}),
-		userAdd: builder.mutation({
+		userCreate: builder.mutation({
 			query: (body) => ({
-				url: 'users/Add',
+				url: 'users/create',
 				method: 'POST',
 				body,
 			}),
@@ -44,7 +44,7 @@ export const {
 	useUserListQuery,
 	useUserDetailQuery,
 	usePrefetch,
-	useUserAddMutation,
+	useUserCreateMutation,
 	useUserUpdateMutation,
 	useUserDeleteMutation,
 } = usersApi

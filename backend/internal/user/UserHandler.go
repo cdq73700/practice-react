@@ -24,7 +24,7 @@ func NewUserHandler(userRoute fiber.Router, us UserService) {
 
 	// Declare routing endpoints for specific routes.
 	userRoute.Get("/:userID", handle.getUser)
-	userRoute.Post("/add", handle.createUser)
+	userRoute.Post("/create", handle.createUser)
 	userRoute.Put("/update", handle.checkIfUserExistsMiddleware, handle.updateUser)
 	userRoute.Delete("/delete", handle.checkIfUserExistsMiddleware, handle.deleteUser)
 }

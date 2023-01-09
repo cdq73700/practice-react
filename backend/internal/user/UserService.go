@@ -31,6 +31,8 @@ func (s *userService) GetUser(ctx context.Context, userID primitive.ObjectID) (*
 // Implementation of 'CreateUser'.
 func (s *userService) CreateUser(ctx context.Context, user *UserStruct) error {
 	// Set default value of 'Created' and 'Modified'.
+	user.Id = primitive.NewObjectID()
+	user.Password = CreatePassword(string(user.Password))
 	//user.Created = time.Now().Unix()
 	//user.Modified = time.Now().Unix()
 

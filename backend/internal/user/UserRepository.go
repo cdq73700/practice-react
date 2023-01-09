@@ -21,8 +21,14 @@ func NewUserRepository(mongoDbConnection *mongo.Collection) UserRepository {
 }
 
 // CreateUser implements UserRepository
-func (*mongoDBRepository) CreateUser(ctx context.Context, user *UserStruct) error {
-	panic("unimplemented")
+func (r *mongoDBRepository) CreateUser(ctx context.Context, user *UserStruct) error {
+	_, err := r.mongodb.InsertOne(context.TODO(), user)
+	if err != nil {
+		return err
+	}
+
+	// Return empty.
+	return nil
 }
 
 // DeleteUser implements UserRepository
