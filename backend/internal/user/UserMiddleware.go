@@ -39,6 +39,6 @@ func (h *UserHandler)checkIfUserExistsMiddleware(c *fiber.Ctx) error {
 	}
 
 	// Store in locals for further processing in the real handler.
-	c.Locals("_id", data.Id)
+	c.Locals("Id", data.Id)
 	return c.Next()
 }

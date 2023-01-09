@@ -32,8 +32,17 @@ func (r *mongoDBRepository) CreateUser(ctx context.Context, user *UserStruct) er
 }
 
 // DeleteUser implements UserRepository
-func (*mongoDBRepository) DeleteUser(ctx context.Context, Id primitive.ObjectID) error {
-	panic("unimplemented")
+func (r *mongoDBRepository) DeleteUser(ctx context.Context, Id primitive.ObjectID) error {
+	// filter
+	filter := bson.D{{Key: "_id", Value: Id}}
+
+	_, err := r.mongodb.DeleteOne(context.TODO(),filter)
+	if err != nil {
+		return err
+	}
+
+	// Return empty.
+	return nil
 }
 
 // GetUser implements UserRepository
@@ -78,7 +87,7 @@ func (r *mongoDBRepository) GetUserList(ctx context.Context) (*[]UserStruct, err
 func (r *mongoDBRepository) UpdateUser(ctx context.Context, Id primitive.ObjectID, user *UserStruct) error {
 
 	// filter
-	filter := bson.D{{Key: "_id", Value: user.Id}}
+	filter := bson.D{{Key: "_id", Value: Id}}
 
 	_, err := r.mongodb.UpdateOne(context.TODO(),filter, bson.M{"$set": user})
 	if err != nil {

@@ -120,6 +120,9 @@ func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 	// Initialize variables.
 	user := &UserStruct{}
 
+	userId := c.Locals("Id")
+	targetedUserID := userId.(primitive.ObjectID)
+
 	// Create cancellable context.
 	customContext, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -133,7 +136,7 @@ func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 	}
 
 	//Update one user.
-	err := h.userService.UpdateUser(customContext, user.Id, user)
+	err := h.userService.UpdateUser(customContext, targetedUserID, user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"status":  "fail",
@@ -151,20 +154,15 @@ func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 // Deletes a single user.
 func (h *UserHandler) deleteUser(c *fiber.Ctx) error {
 	// Initialize previous user ID.
-	targetedUserID,err := primitive.ObjectIDFromHex(c.Locals("_id").(string))
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-			"status":  "fail",
-			"message": err.Error(),
-		})
-	}
+	userId := c.Locals("Id")
+	targetedUserID := userId.(primitive.ObjectID)
 
 	// Create cancellable context.
 	customContext, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	// Delete one user.
-	err = h.userService.DeleteUser(customContext, targetedUserID)
+	err := h.userService.DeleteUser(customContext, targetedUserID)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"status":  "fail",
