@@ -119,13 +119,6 @@ func (h *UserHandler) createUser(c *fiber.Ctx) error {
 func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 	// Initialize variables.
 	user := &UserStruct{}
-	targetedUserID,err := primitive.ObjectIDFromHex(c.Locals("_id").(string))
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-			"status":  "fail",
-			"message": err.Error(),
-		})
-	}
 
 	// Create cancellable context.
 	customContext, cancel := context.WithCancel(context.Background())
@@ -139,8 +132,8 @@ func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 		})
 	}
 
-	// Update one user.
-	err = h.userService.UpdateUser(customContext, targetedUserID, user)
+	//Update one user.
+	err := h.userService.UpdateUser(customContext, user.Id, user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"status":  "fail",

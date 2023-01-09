@@ -75,6 +75,16 @@ func (r *mongoDBRepository) GetUserList(ctx context.Context) (*[]UserStruct, err
 }
 
 // UpdateUser implements UserRepository
-func (*mongoDBRepository) UpdateUser(ctx context.Context, Id primitive.ObjectID, user *UserStruct) error {
-	panic("unimplemented")
+func (r *mongoDBRepository) UpdateUser(ctx context.Context, Id primitive.ObjectID, user *UserStruct) error {
+
+	// filter
+	filter := bson.D{{Key: "_id", Value: user.Id}}
+
+	_, err := r.mongodb.UpdateOne(context.TODO(),filter, bson.M{"$set": user})
+	if err != nil {
+		return err
+	}
+
+	// Return empty.
+	return nil
 }
