@@ -1,24 +1,24 @@
 package users
 
 import (
+	model "backend/Model"
 	"context"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func UserAdd(c *fiber.Ctx, db *mongo.Database) error {
-	userDb := db.Collection(USERS)
+func UserAdd(c *fiber.Ctx) error {
+	userDb := model.UserCollectionClient
 
-	data := new(UserStruct)
+	data := new(model.UserStruct)
 
 	if err := c.BodyParser(data); err != nil {
 		return err
 	}
 
 	docs := []interface{}{
-		&UserStruct{
+		&model.UserStruct{
 			Id:				primitive.NewObjectID(),
 			Email:		data.Email,
 			Name:			data.Name,

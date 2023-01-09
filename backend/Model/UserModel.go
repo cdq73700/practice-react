@@ -1,4 +1,4 @@
-package users
+package model
 
 import (
 	"context"
@@ -6,26 +6,32 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 const USERS = "users"
+
+var UserCollectionClient *mongo.Collection
 
 type UserStruct struct {
 	Id				primitive.ObjectID	"_id"
 	Email			string
 	Name			string
-	Password	string
+	Password	[]byte
 } 
 
-func (user *UserStruct) Initialized(Id primitive.ObjectID,Email string, Name string, Password string) {
-	id := primitive.NewObjectID()
-	if Id != primitive.NilObjectID {
-		id = Id
+func UserInitialized() {
+	UserCollectionClient = GetMongoDbCollection(USERS)
+
+}
+
+func CreatePassword(password string) []byte {
+	hash,err:=bcrypt.GenerateFromPassword([]byte(password),bcrypt.DefaultCost)
+	if err != nil {
+		return nil
 	}
-	user.Id = id
-	user.Email = Email
-	user.Name = Name
-	user.Password = Password
+
+	return hash
 }
 
 func Response(c *fiber.Ctx,cursor *mongo.Cursor,err error) error {

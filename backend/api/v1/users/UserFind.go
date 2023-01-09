@@ -1,15 +1,15 @@
 package users
 
 import (
+	model "backend/Model"
 	"context"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func UserFind(c *fiber.Ctx, db *mongo.Database) error {
+func UserFind(c *fiber.Ctx) error {
 	var filter = bson.D{{}}
 	
 	if c.Params("id") != "" {
@@ -21,12 +21,12 @@ func UserFind(c *fiber.Ctx, db *mongo.Database) error {
 		filter = bson.D{{Key: "_id", Value: objectId}}
 	}
 
-	items := db.Collection(USERS)
+	items := model.UserCollectionClient
 
 	cursor, err := items.Find(context.TODO(), filter)
 	if err != nil {
 		return err
 	}
 
-	return Response(c, cursor, err)
+	return model.Response(c, cursor, err)
 }

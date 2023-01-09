@@ -1,40 +1,31 @@
 package migration
 
 import (
+	model "backend/Model"
 	"backend/db/migration/menus"
 	"backend/db/migration/users"
 	"context"
-
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-const DATABASE_NAME = "test"
+func Migration() {
 
-func Migration(client *mongo.Client) {
+	users.CreateUsers()
 
-	db := client.Database(DATABASE_NAME)
-
-	users.CreateUsers(db)
-
-	menus.CreateMenus(db)
+	menus.CreateMenus()
 
 }
 
-func CollectionDelete(client *mongo.Client) {
+func CollectionDelete() {
 
-	db := client.Database(DATABASE_NAME)
+	users.DropUsers()
 
-	users.DropUsers(db)
-
-	menus.DropMenus(db)
+	menus.DropMenus()
 
 }
 
-func DatabaseDrop(client *mongo.Client) {
+func DatabaseDrop() {
 
-	database := client.Database(DATABASE_NAME)
-
-	err := database.Drop(context.TODO())
+	err := model.DataBaseClient.Drop(context.TODO())
 
 	if err != nil {
 		panic(err)

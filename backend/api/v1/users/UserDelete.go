@@ -1,15 +1,15 @@
 package users
 
 import (
+	model "backend/Model"
 	"context"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func UserDelete(c *fiber.Ctx, db *mongo.Database) error {
-	data := new(UserStruct)
+func UserDelete(c *fiber.Ctx) error {
+	data := new(model.UserStruct)
 
 	if err := c.BodyParser(data); err != nil {
 		return err
@@ -17,7 +17,7 @@ func UserDelete(c *fiber.Ctx, db *mongo.Database) error {
 
 	filter := bson.D{{Key: "_id", Value: data.Id}}
 
-	items := db.Collection(USERS)
+	items := model.UserCollectionClient
 
 	result, err := items.DeleteOne(context.TODO(), filter)
 

@@ -1,26 +1,51 @@
 package main
 
 import (
+	model "backend/Model"
 	"backend/api/v1/test"
 	"backend/api/v1/users"
-	"backend/db"
 	"backend/db/migration"
 	"fmt"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func setUpRoutes(app *fiber.App, db *mongo.Database) {
+var app *fiber.App
+
+func SetUpRoutes() {
 	app.Get("/api/v1/test", test.GetTest)
-	app.Get("/api/v1/users", func(c *fiber.Ctx) error { return users.UserList(c, db) })
-	app.Get("/api/v1/users/:id?", func(c *fiber.Ctx) error { return users.UserFind(c, db) })
+
+	app.Get("/api/v1/users", func(c *fiber.Ctx) error { return users.UserList(c) })
+	app.Get("/api/v1/users/:id?", func(c *fiber.Ctx) error { return users.UserFind(c) })
 	
-	app.Post("/api/v1/users/add", func(c *fiber.Ctx) error { return users.UserAdd(c, db) })
-	app.Put("/api/v1/users/update", func(c *fiber.Ctx) error { return users.UserUpdate(c, db) })
-	app.Delete("/api/v1/users/delete", func(c *fiber.Ctx) error { return users.UserDelete(c, db) })
+	app.Post("/api/v1/users/add", func(c *fiber.Ctx) error { return users.UserAdd(c) })
+	app.Put("/api/v1/users/update", func(c *fiber.Ctx) error { return users.UserUpdate(c) })
+	app.Delete("/api/v1/users/delete", func(c *fiber.Ctx) error { return users.UserDelete(c) })
+}
+
+func RunCommand (arg1 string) string {
+	var message string
+	switch(arg1) {
+	case "migration":
+		migration.Migration()
+		message = "run migration"
+		break
+	case "delete":
+		migration.CollectionDelete()
+		message ="run delete"
+		break
+	case "drop":
+		migration.DatabaseDrop()
+		message = "run drop"
+		break
+	default:
+		message = ""
+		break
+	}
+
+	return message
 }
 
 func main() {
@@ -29,39 +54,20 @@ func main() {
 		arg1 = os.Args[1]
 	}
 
-	client, err := db.GetMongoDbConnection()
-	if err != nil {
-		fmt.Println(err)
+	model.Initialized()
+
+	msg := RunCommand(arg1)
+	if msg != "" {
+		fmt.Println(msg)
 		return
 	}
 
-	if arg1 == "migration" {
-
-		migration.Migration(client)
-
-		fmt.Println("run migration")
-		return
-	}
-
-	if arg1 == "delete" {
-		migration.CollectionDelete(client)
-
-		fmt.Println("run detele")
-		return
-	}
-
-	if arg1 == "drop" {
-		migration.DatabaseDrop(client)
-
-		fmt.Println("run drop")
-		return
-	}
-	app := fiber.New()
+	app = fiber.New()
 
 	// Default config
 	app.Use(cors.New())
 
-	setUpRoutes(app, client.Database("test"))
+	SetUpRoutes()
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World 👋!")

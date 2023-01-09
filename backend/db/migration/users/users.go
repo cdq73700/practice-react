@@ -1,36 +1,27 @@
 package users
 
 import (
+	model "backend/Model"
 	"context"
 	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Users struct {
-	Id				primitive.ObjectID	"_id"
-	Email			string
-	Name			string
-	Password	string
-}
-
-const USERS = "users"
-
-func CreateUsers(db *mongo.Database) {
-	users := db.Collection(USERS)
+func CreateUsers() {
+	users := model.UserCollectionClient
 	docs := []interface{}{
-		&Users{
+		&model.UserStruct{
 			Id:				primitive.NewObjectID(),
 			Email:		"test@test.com",
 			Name:			"test",
-			Password:	"test",
+			Password:	model.CreatePassword("test"),
 		},
-		&Users{
+		&model.UserStruct{
 			Id:				primitive.NewObjectID(),
 			Email:		"test2@test.com",
 			Name:			"test2",
-			Password:	"test2",},
+			Password:	model.CreatePassword("test"),},
 	}
 
 	result, err := users.InsertMany(context.TODO(), docs)
@@ -42,9 +33,9 @@ func CreateUsers(db *mongo.Database) {
 	fmt.Print(result)
 }
 
-func DropUsers(db *mongo.Database) {
+func DropUsers() {
 
-	users := db.Collection(USERS)
+	users := model.UserCollectionClient
 
 	err := users.Drop(context.TODO())
 
