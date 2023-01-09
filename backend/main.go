@@ -1,10 +1,10 @@
 package main
 
 import (
-	model "backend/Model"
 	"backend/api/v1/test"
 	"backend/api/v1/users"
 	"backend/db/migration"
+	model "backend/model"
 	"fmt"
 	"os"
 

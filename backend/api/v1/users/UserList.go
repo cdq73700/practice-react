@@ -1,7 +1,7 @@
 package users
 
 import (
-	model "backend/Model"
+	model "backend/model"
 	"context"
 
 	"github.com/gofiber/fiber/v2"

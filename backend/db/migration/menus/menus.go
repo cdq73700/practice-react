@@ -1,7 +1,7 @@
 package menus
 
 import (
-	model "backend/Model"
+	model "backend/model"
 	"context"
 	"fmt"
 )

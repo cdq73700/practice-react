@@ -1,9 +1,9 @@
 package migration
 
 import (
-	model "backend/Model"
 	"backend/db/migration/menus"
 	"backend/db/migration/users"
+	model "backend/model"
 	"context"
 )
 
