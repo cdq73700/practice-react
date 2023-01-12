@@ -1,6 +1,8 @@
 package main
 
 import (
+	v1 "backend/api/v1"
+	"backend/database"
 	"backend/db/migration"
 	"backend/internal/user"
 	model "backend/model"
@@ -56,6 +58,11 @@ func main() {
 	userRepository := user.NewUserRepository(model.UserCollectionClient)
 	userService := user.NewUserService(userRepository)
 	user.NewUserHandler(app.Group("/api/v1/users"), userService)
+
+
+	data,_ := database.GetMongoDbCollection("test","users")
+
+	v1.NewUserHandler(app.Group("/test"), data.Collection)
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World 👋!")
