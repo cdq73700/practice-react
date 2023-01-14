@@ -9,8 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (db *dbStruct) GetUser(c *fiber.Ctx) error {
-	user := &models.UserStruct{}
+func (service *userService) GetUser(c *fiber.Ctx) error {
 
 	targetedUserID, err := primitive.ObjectIDFromHex(c.Params("Id"))
 	if err != nil {
@@ -19,8 +18,15 @@ func (db *dbStruct) GetUser(c *fiber.Ctx) error {
 			"message": "Please specify a valid user ID!",
 		})
 	}
+	
+	return service.repository.GetUser(c,targetedUserID)
+}
 
-	filter := bson.D{{Key: "_id", Value: targetedUserID}}
+func (db *dbStruct) GetUser(c *fiber.Ctx,id primitive.ObjectID) error {
+	user := &models.UserStruct{}
+
+	// filter := bson.D{{Key: "_id", Value: targetedUserID}}
+	filter := bson.D{{Key: "_id", Value: id}}
 
 	res := db.model.Collection.FindOne(context.TODO(), filter)
 
@@ -33,6 +39,6 @@ func (db *dbStruct) GetUser(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"status": "success",
-		"items": &user,
+		"items":   &user,
 	})
 }

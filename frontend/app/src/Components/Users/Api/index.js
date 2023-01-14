@@ -33,7 +33,7 @@ export const usersApi = createApi({
 		userDelete: builder.mutation({
 			query: (body) => ({
 				url: 'users/delete',
-				method: 'DELETE',
+				method: 'POST',
 				body,
 			}),
 		}),

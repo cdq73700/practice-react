@@ -7,6 +7,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+func (service *userService) GetUserList(c *fiber.Ctx) error {
+	return service.repository.GetUserList(c)
+}
+
 func (db *dbStruct) GetUserList(c *fiber.Ctx) error {
 	var users []userStruct
 

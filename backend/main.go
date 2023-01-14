@@ -2,7 +2,6 @@ package main
 
 import (
 	"backend/db/migration"
-	"backend/internal/user"
 	model "backend/model"
 	"backend/src/routes"
 	"fmt"
@@ -53,10 +52,6 @@ func main() {
 
 	// Default config
 	app.Use(cors.New())
-
-	userRepository := user.NewUserRepository(model.UserCollectionClient)
-	userService := user.NewUserService(userRepository)
-	user.NewUserHandler(app.Group("/api/v1/users/old"), userService)
 
 	routes.NewUserRoutes(app.Group("/api/v1/users"))
 

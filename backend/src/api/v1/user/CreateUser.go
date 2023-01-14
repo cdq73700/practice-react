@@ -5,12 +5,17 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (db *dbStruct) CreateUser(c *fiber.Ctx) error {
+func (service *userService) CreateUser(c *fiber.Ctx) error {
+	return service.repository.CreateUser(c)
+}
 
+func (db *dbStruct) CreateUser(c *fiber.Ctx) error {
 	var err error
+	var result *mongo.InsertOneResult
 	user := &userStruct{}
 
 	err = c.BodyParser(user)
@@ -33,7 +38,7 @@ func (db *dbStruct) CreateUser(c *fiber.Ctx) error {
 	user.Id = primitive.NewObjectID()
 	user.Password = password
 
-	_, err = db.model.Collection.InsertOne(context.TODO(), &user)
+	result, err = db.model.Collection.InsertOne(context.TODO(), &user)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 			"status":  "fail",
@@ -41,9 +46,10 @@ func (db *dbStruct) CreateUser(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(&fiber.Map{
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"status":  "success",
 		"message": &user,
+		"result": &result,
 	})
 }
 
