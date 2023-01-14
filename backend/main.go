@@ -5,7 +5,6 @@ import (
 	"backend/internal/user"
 	model "backend/model"
 	"backend/src/routes"
-	"backend/training"
 	"fmt"
 	"os"
 
@@ -59,7 +58,6 @@ func main() {
 	userService := user.NewUserService(userRepository)
 	user.NewUserHandler(app.Group("/api/v1/users/old"), userService)
 
-	app.Get("/test", training.SendTest)
 	routes.NewUserRoutes(app.Group("/api/v1/users"))
 
 	app.Get("/", func(c *fiber.Ctx) error {
