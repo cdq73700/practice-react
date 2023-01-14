@@ -18,6 +18,7 @@ services:
       - 4000:3000
     volumes:
       - ./backend:/backend
+    tty: true
 
   fiber-mongo:
     image: mongo
