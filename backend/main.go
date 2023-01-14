@@ -2,8 +2,8 @@ package main
 
 import (
 	"backend/db/migration"
-	"backend/internal/user"
 	model "backend/model"
+	"backend/src/routes"
 	"fmt"
 	"os"
 
@@ -53,9 +53,7 @@ func main() {
 	// Default config
 	app.Use(cors.New())
 
-	userRepository := user.NewUserRepository(model.UserCollectionClient)
-	userService := user.NewUserService(userRepository)
-	user.NewUserHandler(app.Group("/api/v1/users"), userService)
+	routes.NewUserRoutes(app.Group("/api/v1/users"))
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World 👋!")
