@@ -4,6 +4,8 @@ import (
 	"backend/db/migration"
 	"backend/internal/user"
 	model "backend/model"
+	"backend/src/routes"
+	"backend/training"
 	"fmt"
 	"os"
 
@@ -55,7 +57,10 @@ func main() {
 
 	userRepository := user.NewUserRepository(model.UserCollectionClient)
 	userService := user.NewUserService(userRepository)
-	user.NewUserHandler(app.Group("/api/v1/users"), userService)
+	user.NewUserHandler(app.Group("/api/v1/users/old"), userService)
+
+	app.Get("/test", training.SendTest)
+	routes.NewUserRoutes(app.Group("/api/v1/users"))
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World 👋!")
